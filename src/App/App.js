@@ -25,7 +25,19 @@ class App extends Component {
         playlistName : "Dummy playlist",
         playlistTracks : playlistTracks
       }
+      this.addTract = this.addTrack.bind(this)
   }
+
+// adding a song from the search results track list to the user’s custom playlist
+  addTrack(track) {
+   let potatotracks = this.state.playlistTracks;
+   if (potatotracks.find(savedTrack => savedTrack.id === track.id)) {
+     return;
+   }
+   potatotracks.push(track);
+   this.setState({playlistTracks: potatotracks});
+ }
+
   render() {
     return (
       <div>
@@ -33,8 +45,8 @@ class App extends Component {
         <div class="App">
            <SearchBar />
              <div class="App-playlist">
-              <SearchResults searchResults={this.state.searchResults}/>
-              <Playlist playlistName={this.state.playlisName} playlistTracks={this.state.playlistTracks}/>
+              <SearchResults searchResults={this.state.searchResults} onAdd = {this.addTrack} />
+              <Playlist playlistName={this.state.playlisName} playlistTracks={this.state.playlistTracks} />
              </div>
         </div>
       </div>
