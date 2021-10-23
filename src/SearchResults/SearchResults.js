@@ -9,7 +9,7 @@ class SearchResults extends React.Component {
     console.log(this.props.searchResults);
     return(
       <div className="SearchResults">
-        <h2>Results</h2>
+        <h2>Search Results</h2>
         <TrackList tracks={this.props.searchResults}/>
       </div>
     );

@@ -11,22 +11,31 @@ const searchResults = [
                         {name: 'Et demain?', artist: 'Et demain? Le collectif', album: 'Et demain?', id: 2},
                         {name: 'Blessings', artist: 'Hollow Coves', album: 'Blessings', id: 3}
                       ]
+const playlistTracks = [
+                        {name: 'Ilalo', artist: 'Chancha Via Circuito', album: 'Bienaventuranza', id: 1},
+                        {name: 'L.O.V.E.', artist: 'Degiheugi', album: 'Dancing Chords and Fireflies', id: 2},
+                        {name: 'Tickling the Amygdala', artist: 'Museum of Consciousness', album: 'Shpongle', id: 3}
+                      ]
 
 class App extends Component {
   constructor (props) {
     super(props);
-      this.state = { searchResults : searchResults }
+      this.state = {
+        searchResults : searchResults,
+        playlistName : "Dummy playlist",
+        playlistTracks : playlistTracks
+      }
   }
   render() {
-      return (
+    return (
       <div>
         <h1>Ja<span class="highlight">mmm</span>ing</h1>
         <div class="App">
-          < SearchBar />
-          <div class="App-playlist">
-           < SearchResults searchResults={this.state.searchResults}/>
-           < Playlist />
-          </div>
+           <SearchBar />
+             <div class="App-playlist">
+              <SearchResults searchResults={this.state.searchResults}/>
+              <Playlist playlistName={this.state.playlisName} playlistTracks={this.state.playlistTracks}/>
+             </div>
         </div>
       </div>
     );
