@@ -28,6 +28,7 @@ class App extends Component {
       this.addTract = this.addTrack.bind(this)
       this.removeTract = this.removeTrack.bind(this)
       this.updatePlaylistName = this.updatePlaylistName.bind(this)
+      this.savePlaylist = this.savePlaylist.bind(this)
   }
 
 // checking to see if the track already exist in the playlist. If not then push the new track into the playlist.
@@ -48,6 +49,10 @@ class App extends Component {
   updatePlaylistName(name) {
     this.setState({playlistName: name})
   }
+  savePlaylist() {
+    const trackURIs = playlistTracks.map(track => track.uri)
+    console.log(trackURIs)
+  }
 
   render() {
     return (
@@ -57,7 +62,11 @@ class App extends Component {
            <SearchBar />
              <div class="App-playlist">
               <SearchResults searchResults={this.state.searchResults} onAdd = {this.addTrack} />
-              <Playlist playlistName={this.state.playlisName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName}/>
+              <Playlist playlistName={this.state.playlisName}
+                        playlistTracks={this.state.playlistTracks}
+                        onRemove={this.removeTrack}
+                        onNameChange={this.updatePlaylistName}
+                        onSave={this.savePlaylist}/>
              </div>
         </div>
       </div>
