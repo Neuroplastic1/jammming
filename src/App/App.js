@@ -26,17 +26,23 @@ class App extends Component {
         playlistTracks : playlistTracks
       }
       this.addTract = this.addTrack.bind(this)
+      this.removeTract = this.removeTrack.bind(this)
   }
 
-// adding a song from the search results track list to the user’s custom playlist
+// checking to see if the track already exist in the playlist. If not then push the new track into the playlist.
   addTrack(track) {
-   let potatotracks = this.state.playlistTracks;
-   if (potatotracks.find(savedTrack => savedTrack.id === track.id)) {
+   if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
      return;
    }
-   potatotracks.push(track);
-   this.setState({playlistTracks: potatotracks});
- }
+   playlistTracks.push(track);
+   this.setState({playlistTracks: playlistTracks})
+  }
+// creating an updatedPlaylist array after filtering out given track
+  removeTrack(track) {
+    const playlistTracks = this.state.playlistTracks
+    const updatedPlaylistTracks = playlistTracks.filter(playlistTrack => playlistTracks.id !== track.id)
+    this.setState({playlisTracks: updatedPlaylistTracks})
+  }
 
   render() {
     return (
@@ -46,7 +52,7 @@ class App extends Component {
            <SearchBar />
              <div class="App-playlist">
               <SearchResults searchResults={this.state.searchResults} onAdd = {this.addTrack} />
-              <Playlist playlistName={this.state.playlisName} playlistTracks={this.state.playlistTracks} />
+              <Playlist playlistName={this.state.playlisName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack}/>
              </div>
         </div>
       </div>
