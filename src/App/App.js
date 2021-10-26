@@ -2,31 +2,28 @@ import React, {Component} from 'react'
 import SearchBar from '../SearchBar/SearchBar'
 import SearchResults from '../SearchResults/SearchResults'
 import Playlist from '../Playlist/Playlist'
+import Spotify from '../util/Spotify'
 import './App.css'
 
 // hard coded searchResults array of track={} objects
 // to pass the state of the App component’s searchResults to the SearchResults component.
-const searchResults = [
-                        {name: 'Luminous Beings', artist: 'Jon Hopkins', album: 'Singularity', id: 1},
-                        {name: 'Et demain?', artist: 'Et demain? Le collectif', album: 'Et demain?', id: 2},
-                        {name: 'Blessings', artist: 'Hollow Coves', album: 'Blessings', id: 3}
-                      ]
-const playlistTracks = [
-                        {name: 'Ilalo', artist: 'Chancha Via Circuito', album: 'Bienaventuranza', id: 1},
-                        {name: 'L.O.V.E.', artist: 'Degiheugi', album: 'Dancing Chords and Fireflies', id: 2},
-                        {name: 'Tickling the Amygdala', artist: 'Museum of Consciousness', album: 'Shpongle', id: 3}
+const customPlaylistTracks = [
+                        {name: 'Ilalo', artist: 'Chancha Via Circuito', album: 'Bienaventuranza', id: 4},
+                        {name: 'L.O.V.E.', artist: 'Degiheugi', album: 'Dancing Chords and Fireflies', id: 5},
+                        {name: 'Tickling the Amygdala', artist: 'Museum of Consciousness', album: 'Shpongle', id: 6}
                       ]
 
 class App extends Component {
   constructor (props) {
     super(props);
       this.state = {
-        searchResults : searchResults,
-        playlistName : "Dummy playlist",
-        playlistTracks : playlistTracks
+        searchResults : [],
+        playlistTracks : customPlaylistTracks
       }
-      this.addTract = this.addTrack.bind(this)
-      this.removeTract = this.removeTrack.bind(this)
+
+
+      this.addTrack = this.addTrack.bind(this)
+      this.removeTrack = this.removeTrack.bind(this)
       this.updatePlaylistName = this.updatePlaylistName.bind(this)
       this.savePlaylist = this.savePlaylist.bind(this)
       this.search = this.search.bind(this)
@@ -34,8 +31,10 @@ class App extends Component {
 
 // checking to see if the track already exist in the playlist. If not then push the new track into the playlist.
   addTrack(track) {
+    console.log('this is addtrack func')
     const playlistTracks = this.state.playlistTracks
-    if (playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+
+    if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
      return;
    }
    playlistTracks.push(track);
@@ -45,7 +44,7 @@ class App extends Component {
   removeTrack(track) {
     const playlistTracks = this.state.playlistTracks
     const updatedPlaylistTracks = playlistTracks.filter(playlistTrack => playlistTracks.id !== track.id)
-    this.setState({playlisTracks: updatedPlaylistTracks})
+    this.setState({playlistTracks: updatedPlaylistTracks})
   }
 
   updatePlaylistName(name) {
@@ -53,21 +52,21 @@ class App extends Component {
   }
 
   savePlaylist() {
-    const trackURIs = playlistTracks.map(track => track.uri)
+    const trackURIs = customPlaylistTracks.map(track => track.uri)
     console.log(trackURIs)
   }
 
   search(term) {
-    console.log(term)
-  }
+   Spotify.search(term).then(tracks => this.setState({searchResults: tracks}));
+ }
 
   render() {
     return (
       <div>
-        <h1>Ja<span class="highlight">mmm</span>ing</h1>
-        <div class="App">
+        <h1>Ja<span className="highlight">mmm</span>ing</h1>
+        <div className="App">
            <SearchBar onSearch={this.search}/>
-             <div class="App-playlist">
+             <div className="App-playlist">
               <SearchResults searchResults={this.state.searchResults} onAdd = {this.addTrack} />
               <Playlist playlistName={this.state.playlisName}
                         playlistTracks={this.state.playlistTracks}

@@ -6,7 +6,6 @@ class SearchResults extends React.Component {
 
  // passing searchResults aquired from app as tracks to Tracklist
   render() {
-    console.log(this.props.searchResults);
     return(
       <div className="SearchResults">
         <h2>Search Results</h2>
