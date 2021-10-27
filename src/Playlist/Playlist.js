@@ -14,7 +14,7 @@ handleNameChange(event) {
     render() {
         return(
             <div className="Playlist">
-                <input value="New Playlist" onChange={this.handleNameChange}/>
+                <input placeholder="New Playlist" onChange={this.handleNameChange}/>
                 <TrackList tracks={this.props.playlistTracks}
                            onRemove={this.props.onRemove}
                            isRemoval={true}/>

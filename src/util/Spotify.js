@@ -1,11 +1,12 @@
 const clientId = process.env.REACT_APP_Jamming_ClientID
-const redirectUri = 'http://localhost:3000/';
+const redirectUri = 'http://JammmingSpotifyPlaylist.surge.sh';
 
 let accessToken;
-// check for users access token 11 -> 14
-// .match() method to retrieve the access token and expiration time from the URL. 16 -> 17 (implicit grant flow)
-// Set the access token to expire accessToken = '' at the value for expiration time 23
-// Clear the parameters from the URL, so the app doesn’t try grabbing the access token after it has expired 24
+// Spotify module
+// check for users access token 12 -> 15
+// .match() method to retrieve the access token and expiration time from the URL. 17 -> 18 (implicit grant flow)
+// Set the access token to expire accessToken = '' at the value for expiration time 25
+// Clear the parameters from the URL, so the app doesn’t try grabbing the access token after it has expired 25
 const Spotify = {
 
     getAccessToken() {
@@ -20,7 +21,7 @@ const Spotify = {
             accessToken = accessTokenMatch[1];
 
             const expiresIn = Number(expiresInMatch[1]);
-console.log(expiresInMatch)
+
             window.setTimeout(() => accessToken = '', expiresIn * 1000);
             window.history.pushState('Access Token', null, '/');
         } else {
@@ -38,11 +39,11 @@ console.log(expiresInMatch)
         }).then(response => {
             //console.log(response.json());
             return response.json();
-        }).then(jsonResponse => {
-            if (!jsonResponse.tracks) {
+        }).then(response => {
+            if (!response.tracks) {
                 return [];
             }
-            return jsonResponse.tracks.items.map(track => ({
+            return response.tracks.items.map(track => ({
                 id: track.id,
                 name: track.name,
                 artist: track.artists[0].name,
@@ -50,6 +51,38 @@ console.log(expiresInMatch)
                 uri: track.uri,
                 preview: track['preview_url']
             }));
+        });
+    },
+    savePlaylist(name, trackUris) {
+        if (!name || !trackUris.length) {
+            return;
+        }
+        const accessToken = Spotify.getAccessToken();
+        const headers = { Authorization: `Bearer ${accessToken}`};
+        let userId;
+
+        return fetch('https://api.spotify.com/v1/me',
+        {
+              headers: {
+              Authorization: `Bearer ${accessToken}`
+        }
+        }).then(response => response.json())
+          .then(response => {
+                userId = response.id;
+                return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+                    headers: headers,
+                    method: 'POST',
+                    body: JSON.stringify({name: name})
+                })
+          .then(response => response.json())
+          .then(response => {
+                const playlistID = response.id;
+                return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistID}/tracks`, {
+                    headers: headers,
+                    method: 'POST',
+                    body: JSON.stringify({uris: trackUris})
+                });
+            })
         });
     }
 
