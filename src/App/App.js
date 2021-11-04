@@ -10,6 +10,7 @@ class App extends Component {
     super(props);
       this.state = {
         searchResults : [],
+        playlistName: "New Playlist",
         playlistTracks : []
       }
 
@@ -63,7 +64,7 @@ class App extends Component {
            <SearchBar onSearch={this.search}/>
              <div className="App-playlist">
               <SearchResults searchResults={this.state.searchResults} onAdd = {this.addTrack} />
-              <Playlist playlistName={this.state.playlisName}
+              <Playlist playlistName={this.state.playlistName}
                         playlistTracks={this.state.playlistTracks}
                         onRemove={this.removeTrack}
                         onNameChange={this.updatePlaylistName}
